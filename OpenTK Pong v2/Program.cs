@@ -6,7 +6,9 @@
         {
             Console.WriteLine("Hello, World!");
 
-            using (Game game = new Game(800, 600, "LearnOpenTK"))
+            
+
+            using (Game game = new Game(800, 600, "Test"))
             {
                 game.Run();
             }
