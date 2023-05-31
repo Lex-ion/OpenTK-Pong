@@ -6,7 +6,7 @@ namespace OpenTK_Pong_v2
     public class Shader
     {
 
-        int Handle;
+        public int Handle;
 
         public Shader(string vertexPath, string fragmentPath)
         {
