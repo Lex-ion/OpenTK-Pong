@@ -10,5 +10,5 @@ void main()
 {
     gl_Position = vec4(aPos, 1.0)*transform;
     
-    ourColor =aColor; // set ourColor to the input color we got from the vertex data
+    ourColor =vec3(gl_Position.x,gl_Position.y,gl_Position.z);// aColor; // set ourColor to the input color we got from the vertex data
 }   

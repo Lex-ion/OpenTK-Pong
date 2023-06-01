@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 using System.Diagnostics;
 using OpenTK.Graphics.OpenGL4;
-
+using OpenTK.Mathematics;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
@@ -20,17 +20,23 @@ namespace OpenTK_Pong_v2
 
         static float fl = 0;
 
+        
+
+        static float test = 0;
+        static float test2 = 0;
+
+
         private float[] vertices =
   {
       // positions        // colors
-      0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
-     -0.5f, -0.5f+fl, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
-      0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top 
+      0.5f, -0.5f, 0.0f,  1.0f, 1.0f, 1.0f,   // bottom right
+     -0.5f, -0.5f, 0.0f,  1.0f, 1.0f, 1.0f,   // bottom left
+      0.0f,  0.5f, 0.0f,  1.0f, 1.0f, 1.0f    // top 
     };
 
 
-        
 
+       
         Stopwatch _timer = new Stopwatch();
 
         int VertexBufferObject;
@@ -52,18 +58,32 @@ namespace OpenTK_Pong_v2
             {
                 Close();
             }
-            if (input.IsKeyDown(Keys.Space))
+            if (input.IsKeyDown(Keys.Right))
             {
-                fl += 0.1f;
+                test += 0.001f;
             }
-           
+            if (input.IsKeyDown(Keys.Left))
+            {
+                test -= 0.001f;
+            }
+            if (input.IsKeyDown(Keys.Up))
+            {
+                test2 += 0.001f;
+            }
+            if (input.IsKeyDown(Keys.Down))
+            {
+                test2 -= 0.001f;
+            }
+
+
+
         }
 
         protected override void OnLoad()
         {
             base.OnLoad();
 
-            GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            GL.ClearColor(0, 0, 0, 1.0f);
 
             VertexBufferObject = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBufferObject);//vytvori buffer
@@ -88,6 +108,8 @@ namespace OpenTK_Pong_v2
             _timer.Start();
         }
 
+        
+
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
@@ -100,11 +122,24 @@ namespace OpenTK_Pong_v2
 
             shader.Use();
 
-          //  double timeValue = _timer.Elapsed.TotalSeconds;
-          //  float greenValue = (float)Math.Abs(Math.Sin(timeValue) / 3.0f + 0.5f);
-          //  float redValue = (float)Math.Abs(Math.Sin(timeValue+1) / 2.0f + 0.5f);
-          //  int vertexColorLocation = GL.GetUniformLocation(shader.Handle, "ourColor");
-          //  GL.Uniform4(vertexColorLocation,redValue , greenValue, (float)Math.Abs(Math.Sin(timeValue+2) / 1.0f + 0.5f), 1.0f);
+            
+            Matrix4 translation = Matrix4.CreateTranslation(test,test2,0);
+            Matrix4 rotation = Matrix4.CreateRotationZ(MathHelper.DegreesToRadians( 50*(-test+test2)));
+            Matrix4 scale = Matrix4.CreateScale(0.5f, 0.5f, 0.5f);
+            Matrix4 trans = rotation*translation * scale;
+
+            
+            GL.UseProgram(1);
+
+            int location = GL.GetUniformLocation(shader.Handle, "transform");
+
+            GL.UniformMatrix4(location, true, ref trans);
+
+            //  double timeValue = _timer.Elapsed.TotalSeconds;
+            //  float greenValue = (float)Math.Abs(Math.Sin(timeValue) / 3.0f + 0.5f);
+            //  float redValue = (float)Math.Abs(Math.Sin(timeValue+1) / 2.0f + 0.5f);
+            //  int vertexColorLocation = GL.GetUniformLocation(shader.Handle, "ourColor");
+            //  GL.Uniform4(vertexColorLocation,redValue , greenValue, (float)Math.Abs(Math.Sin(timeValue+2) / 1.0f + 0.5f), 1.0f);
 
             GL.BindVertexArray(VertexArrayObject);
             GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
