@@ -87,7 +87,7 @@ namespace OpenTK_Pong_v2
             }
         }
 
-
+        
         public void Dispose()
         {
             Dispose(true);

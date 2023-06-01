@@ -7,7 +7,7 @@
             Console.WriteLine("Hello, World!");
 
             
-              using (Game game = new Game(800, 600, "Test"))
+              using (Game game = new Game(800, 800, "Test"))
               {
                   game.Run();
               }
