@@ -18,14 +18,7 @@ namespace OpenTK_Pong_v2
     internal class Game : GameWindow
     {
 
-        static float fl = 0;
-
-
-
-        static float test = 0;
-        static float test2 = 0; 
-        static float test3 = 0;
-        static float test4 = 0;
+       
 
 
         private float[] vertices =
@@ -36,21 +29,28 @@ namespace OpenTK_Pong_v2
       0.0f,  0.5f, 0.0f,  1.0f, 1.0f, 1.0f    // top 
     };
 
+        
 
 
-       
         Stopwatch _timer = new Stopwatch();
+        Stopwatch fpsStopWatch = new Stopwatch();
 
-        int VertexBufferObject;
-        int VertexArrayObject;
-        int ElementBufferObject;
 
-        Ball ball = new Ball();
+
+        Ball ball;
 
         Shader shader;
 
-        RenderObject renderObject;
-        RenderObject renderObject2;
+
+        Paddle RightPaddle;
+        Paddle LeftPaddle;
+
+        bool Runing = true;
+
+
+        public float LeftStep = 0;
+        public float RightStep = 0;
+      
 
         public Game(int width, int height, string title) : base(GameWindowSettings.Default, new NativeWindowSettings() { Size = (width, height), Title = title })
         {  
@@ -61,43 +61,58 @@ namespace OpenTK_Pong_v2
 
             KeyboardState input = KeyboardState;
 
-            if (input.IsKeyDown(Keys.Escape))
+            if (input.IsKeyPressed(Keys.Escape))
             {
-                Close();
-            }
-            if (input.IsKeyDown(Keys.Right))
-            {
-                test += 0.0001f;
-            }
-            if (input.IsKeyDown(Keys.Left))
-            {
-                test -= 0.0001f;
-            }
-            if (input.IsKeyDown(Keys.Up))
-            {
-                test2 += 0.0001f;
-            }
-            if (input.IsKeyDown(Keys.Down))
-            {
-                test2 -= 0.0001f;
+                Runing = !Runing;
+                Console.WriteLine(Runing);
             }
 
-            
+
+            if (!Runing)
+            {
+                return;
+            }
+
+
+            float RightStepSize = 0.0004f;
+            if (input.IsKeyDown(Keys.Right))
+            {
+               RightStepSize = 0.00009f;
+            }
+            else if (input.IsKeyDown(Keys.Left))
+            {
+               RightStepSize = 0.001f;
+            }
+
+
+            if (input.IsKeyDown(Keys.Up) &&RightStep <= 0.88)
+            {
+                RightStep += RightStepSize;
+            }
+            if (input.IsKeyDown(Keys.Down) &&RightStep >= -0.88)
+            {
+                RightStep -=RightStepSize;
+            }
+
+
+            float LeftStepSize = 0.0004f;
             if (input.IsKeyDown(Keys.D))
             {
-                test3 += 0.0001f;
+                LeftStepSize = 0.00009f;
             }
-            if (input.IsKeyDown(Keys.A))
+            else if (input.IsKeyDown(Keys.A))
             {
-                test3 -= 0.0001f;
+                LeftStepSize = 0.001f;
             }
-            if (input.IsKeyDown(Keys.W))
+
+
+            if (input.IsKeyDown(Keys.W)&&LeftStep<=0.88)
             {
-                test4 += 0.0001f;
+                LeftStep += LeftStepSize;
             }
-            if (input.IsKeyDown(Keys.S))
+            if (input.IsKeyDown(Keys.S) && LeftStep >= -0.88)
             {
-                test4 -= 0.0001f;
+                LeftStep -= LeftStepSize;
             }
 
 
@@ -115,8 +130,14 @@ namespace OpenTK_Pong_v2
 
             shader = new Shader("shader.vert", "shader.frag");
 
-            renderObject = new RenderObject(ball.vertices, BufferUsageHint.DynamicDraw, ball.indices);
-            renderObject2 = new RenderObject(ball.vertices, BufferUsageHint.DynamicDraw, ball.indices);
+          // renderObject = new RenderObject(ball.vertices, BufferUsageHint.DynamicDraw, ball.indices);
+          // renderObject2 = new RenderObject(ball.vertices, BufferUsageHint.DynamicDraw, ball.indices);
+
+            RightPaddle = new Paddle(true);
+            LeftPaddle = new Paddle(false);
+
+            ball = new Ball();
+
             //  VertexArrayObject = GL.GenVertexArray();
             //
             //  GL.BindVertexArray(VertexArrayObject);
@@ -150,12 +171,32 @@ namespace OpenTK_Pong_v2
             //  GL.EnableVertexAttribArray(3);
 
             _timer.Start();
+            fpsStopWatch.Start();
         }
 
-        
 
+        int fps = 0;
         protected override void OnRenderFrame(FrameEventArgs e)
         {
+            fps += 1;
+
+            if (fpsStopWatch.Elapsed.TotalMilliseconds >= 100)
+            {
+                fps *= 10;
+                Title = "FPS: "+fps.ToString();
+                fps = 0;
+                fpsStopWatch.Restart();
+                fpsStopWatch.Start();
+            }
+            
+
+            //Console.WriteLine(RenderTime);
+            
+            if (!Runing)
+            {
+                return;
+            }
+
             base.OnRenderFrame(e);
 
             GL.Clear(ClearBufferMask.ColorBufferBit);
@@ -167,10 +208,15 @@ namespace OpenTK_Pong_v2
             shader.Use();
 
             
-            Matrix4 translation = Matrix4.CreateTranslation(test,test2,0);
+            
 
-            renderObject.Render(shader, new Vector3(test, test2, 0)); 
-            renderObject.Render(shader, new Vector3(test3, test4, 0));
+            //renderObject.Render2(shader, new Vector3(test, test2, 0),(_timer.Elapsed.Milliseconds/1)); 
+            
+            ball.RenderObject.Render(shader,new Vector3(0,0,0),_timer.Elapsed.Ticks/25000);
+
+            RightPaddle.RenderObject.Render(shader, new Vector3(0,LeftStep,0));
+            LeftPaddle.RenderObject.Render(shader, new Vector3(0, RightStep, 0));
+           
 
             GL.UseProgram(shader.Handle);
 

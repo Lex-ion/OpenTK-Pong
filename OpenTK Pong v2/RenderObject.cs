@@ -54,11 +54,17 @@ namespace OpenTK_Pong_v2
             GL.VertexAttribPointer(1,3,VertexAttribPointerType.Float,false,6*sizeof(float),3*sizeof(float));
             GL.EnableVertexAttribArray(1);
         }
+
         
-        public void Render(Shader shader, Vector3 pos)
+
+        public void Render(Shader shader, Vector3 pos, float deg = 0, float sca=1)
         {
             Matrix4 model = Matrix4.Identity;
-            model*=Matrix4.CreateTranslation(pos);
+            model *= Matrix4.CreateScale(sca);
+            
+            model*=Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(deg));
+            model *= Matrix4.CreateTranslation(pos);
+
 
             int location = GL.GetUniformLocation(shader.Handle, "transform");
             GL.UniformMatrix4(location, true, ref model);
@@ -71,9 +77,29 @@ namespace OpenTK_Pong_v2
             {
                 GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
             }
+        }
+
+        public void Render2(Shader shader, Vector3 pos, float deg = 0, float sca = 1)
+        {
+            Matrix4 model = Matrix4.Identity;
+            model *= Matrix4.CreateScale(sca);
+            model *= Matrix4.CreateTranslation(pos);
+            model *= Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(deg));
+            
 
 
+            int location = GL.GetUniformLocation(shader.Handle, "transform");
+            GL.UniformMatrix4(location, true, ref model);
 
+            GL.BindVertexArray(VAOHandle);
+            if (Indices != null)
+            {
+                GL.DrawElements(PrimitiveType.Triangles, Indices.Length, DrawElementsType.UnsignedInt, 0);
+            }
+            else
+            {
+                GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
+            }
         }
     }
 }
