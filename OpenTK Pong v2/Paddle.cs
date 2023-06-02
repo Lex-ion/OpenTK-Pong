@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+
 namespace OpenTK_Pong_v2
 {
     internal class Paddle

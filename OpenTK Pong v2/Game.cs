@@ -207,12 +207,14 @@ namespace OpenTK_Pong_v2
 
             shader.Use();
 
-            
-            
+
+
 
             //renderObject.Render2(shader, new Vector3(test, test2, 0),(_timer.Elapsed.Milliseconds/1)); 
+            ball.GetPaddles(new Vector3(0,LeftStep,0),new Vector3(0,RightStep,0));
+            ball.Render(shader,_timer.Elapsed.Ticks/25000);
+
             
-            ball.RenderObject.Render(shader,new Vector3(0,0,0),_timer.Elapsed.Ticks/25000);
 
             RightPaddle.RenderObject.Render(shader, new Vector3(0,LeftStep,0));
             LeftPaddle.RenderObject.Render(shader, new Vector3(0, RightStep, 0));
