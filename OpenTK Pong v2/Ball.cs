@@ -45,8 +45,12 @@ namespace OpenTK_Pong_v2
 
         Vector3 LeftPaddle;
         Vector3 RightPaddle;
-
+        public Vector3 myPos;
         int rotator = 1;
+
+       public bool Running = false;
+
+       public Vector2 Score = new Vector2(0, 0);
 
         public Ball()
         {
@@ -58,7 +62,7 @@ namespace OpenTK_Pong_v2
     
         public void Render(Shader shader, float deg = 0, float sca=1)
         {
-            Vector3 myPos = new Vector3(PosX, PosY,0);
+            myPos = new Vector3(PosX, PosY,0);
             PosX += SpeedX;
             PosY += SpeedY;
             CheckForBorder(myPos);
@@ -70,38 +74,49 @@ namespace OpenTK_Pong_v2
             RenderObject.Render(shader, myPos, deg*rotator, sca);
         }
 
-        public void CheckForBorder(Vector3 pos)
+        public async void CheckForBorder(Vector3 pos)
         {
              Random random = new Random();
 
 
-            if (timer.ElapsedMilliseconds>150&&pos.Y>=0.975||pos.Y<=-0.975f&& timer.ElapsedMilliseconds > 150)
+            if (timer.ElapsedMilliseconds>300&&pos.Y>=0.975||pos.Y<=-0.975f&& timer.ElapsedMilliseconds > 300)
             {
 
-                SpeedY += 0.00001f* random.Next(3);
-                SpeedX += 0.00001f * random.Next(3);
+               
 
                 SpeedY *= -1;
                 timer.Reset();
                 timer.Start();
-                Console.Beep(5000, 25);
+
+                
+                
+                new Thread(() => Console.Beep(5000, 25)).Start();
+
             }
 
-            if(timer2.ElapsedMilliseconds > 150 && pos.X >= 0.975 || pos.X <= -0.975f && timer2.ElapsedMilliseconds > 150)
+            if(timer2.ElapsedMilliseconds > 20 && pos.X >= 0.975 || pos.X <= -0.975f && timer2.ElapsedMilliseconds > 20)
             {
 
-                SpeedY += 0.00001f * random.Next(3);
-                SpeedX += 0.00001f * random.Next(3);
 
                 SpeedX *= -1;
                 timer2.Reset();
                 timer2.Start();
-                Console.Beep(5000, 25);
+                new Thread(() => Console.Beep(500, 500)).Start();
+
+                if (pos.X > 0)
+                {
+                    Score.X++;
+                }
+                else
+                    Score.Y++;
+
+                Start();
+
             }
 
             
 
-           if (pos.Y<LeftPaddle.Y+0.12&&pos.Y>LeftPaddle.Y-0.12f&&pos.X<-0.85f&&timer2.ElapsedMilliseconds>150)
+           if (pos.Y<LeftPaddle.Y+0.12&&pos.Y>LeftPaddle.Y-0.12f&&pos.X<-0.85f&&timer2.ElapsedMilliseconds>300)
            {
                 countOfBounces++;
               
@@ -114,10 +129,18 @@ namespace OpenTK_Pong_v2
                 timer2.Reset();
                 timer2.Start();
                 rotator *= -1;
-                Console.Beep(3000, 25);
+
+                SpeedX *= 1.05f;
+                SpeedY *= 1.05f;
+
+                
+                
+
+               
+                new Thread(() => Console.Beep(3000, 25)).Start();
             }
 
-            if (pos.Y < RightPaddle.Y + 0.12 && pos.Y > RightPaddle.Y - 0.12f && pos.X > 0.85f && timer2.ElapsedMilliseconds > 150)
+            if (pos.Y < RightPaddle.Y + 0.12 && pos.Y > RightPaddle.Y - 0.12f && pos.X > 0.85f && timer2.ElapsedMilliseconds > 300)
             {
                 countOfBounces++;
 
@@ -130,8 +153,34 @@ namespace OpenTK_Pong_v2
                 timer2.Start();
                 rotator *= -1;
 
-                Console.Beep(3000, 25);
+                SpeedX *= 1.05f;
+                SpeedY *= 1.05f;
+
+                 new Thread(() => Console.Beep(3000, 25)).Start();
             }
+        }
+
+        public void Start()
+        {
+            Running = true;
+
+            Random rnd = new Random();
+
+            SpeedX = (float)rnd.Next(20) / 100000; 
+            SpeedY = (float)rnd.Next(20) / 100000;
+
+            PosX = 0;
+            PosY = 0;
+
+            if (rnd.NextDouble() > 0.5)
+            {
+                SpeedX *= -1;
+            }
+            if (rnd.NextDouble() > 0.5)
+            {
+                SpeedY *= -1;
+            }
+            Console.Beep(1000, 50);
         }
 
         public void GetPaddles(Vector3 leftPaddle, Vector3 rightPaddle)

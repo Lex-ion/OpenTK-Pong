@@ -29,7 +29,7 @@ namespace OpenTK_Pong_v2
       0.0f,  0.5f, 0.0f,  1.0f, 1.0f, 1.0f    // top 
     };
 
-        
+        public Vector2 Score = new Vector2();
 
 
         Stopwatch _timer = new Stopwatch();
@@ -50,7 +50,14 @@ namespace OpenTK_Pong_v2
 
         public float LeftStep = 0;
         public float RightStep = 0;
-      
+
+        bool Debugging = false;
+        bool AutoLeft = false;
+        bool AutoRight = false;
+        bool Lag = false;
+        int LagValue=0;
+        bool Step = false;
+        int StepValue = 0;
 
         public Game(int width, int height, string title) : base(GameWindowSettings.Default, new NativeWindowSettings() { Size = (width, height), Title = title })
         {  
@@ -64,7 +71,6 @@ namespace OpenTK_Pong_v2
             if (input.IsKeyPressed(Keys.Escape))
             {
                 Runing = !Runing;
-                Console.WriteLine(Runing);
             }
 
 
@@ -180,22 +186,146 @@ namespace OpenTK_Pong_v2
         {
             fps += 1;
 
+           
+
+            if (Console.KeyAvailable)
+            {
+                string input= Console.ReadLine();
+
+                switch (input.ToLower())
+                {
+                    case "newball":
+                        ball.Start();
+                        Console.Clear();
+                        break;
+
+                    case "debug":
+                        Debugging = !Debugging;
+                        Console.Clear();
+                        break;
+
+                    case "autoleft":
+                        AutoLeft = !AutoLeft;
+                        Console.Clear(); break;
+                    case "autoright":
+                        AutoRight = !AutoRight;
+                        Console.Clear(); break;
+
+                    case "stop":
+                        Close();
+                        break;
+
+                    case "reset":
+                        ball.Start();
+                        ball.Score.X = 0;
+                        ball.Score.Y = 0;
+                        LeftStep = 0;
+                        RightStep = 0;
+                        Runing = true;
+                        Debugging = false;
+                        Lag = false;
+                        LagValue = 0;
+                        AutoLeft = false;
+                        AutoRight = false;
+                        Step = false;
+                        StepValue=0;
+                        break;
+                    
+
+                }
+                if (input.Contains("lag"))
+                {
+                    input = input.Split("lag")[1].Trim();
+                    if (input.Length <= 0)
+                    {
+                        Lag = false;
+                        
+                    }else
+                    {
+                        int.TryParse(input, out LagValue);
+                        Lag = true;
+                    }
+                    Console.Clear();
+                }
+
+                if (input.Contains("step"))
+                {
+                    input = input.Split("step")[1].Trim();
+                    if (input.Length <= 0)
+                    {
+                        Step = false;
+
+                    }
+                    else
+                    {
+                        int.TryParse(input, out StepValue);
+                        Step = true;
+                    }
+                    Console.Clear();
+                    Runing = true;
+                }
+
+            }
+
             if (fpsStopWatch.Elapsed.TotalMilliseconds >= 100)
             {
                 fps *= 10;
-                Title = "FPS: "+fps.ToString();
+                Title = "Skóre: " + ball.Score.X + "-" + ball.Score.Y + "   FPS: " +1000/RenderTime;//fps.ToString();
                 fps = 0;
                 fpsStopWatch.Restart();
                 fpsStopWatch.Start();
+
+                if (Debugging)
+                {
+                    Console.SetCursorPosition(0, 0);
+
+                    Console.WriteLine("RenderLatency: "+ (decimal)RenderTime);
+                    
+                    Console.WriteLine();
+                    Console.WriteLine("Ball pos: "+ball.myPos);
+                    Console.WriteLine("Ball speed: " + ball.SpeedX + " " + ball.SpeedY); 
+                    Console.WriteLine();    
+                    Console.WriteLine("LPaddle pos: " + new Vector3(0, RightStep, 0));
+                    Console.WriteLine();
+                    Console.WriteLine("RPaddle pos: " + new Vector3(0, LeftStep, 0));
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine("AutoLeft: " + AutoLeft);
+                    Console.WriteLine("AutoRight: " + AutoRight);
+                    Console.WriteLine();
+                    Console.WriteLine("Lag: "+Lag);
+                    Console.WriteLine("LagValue: " + LagValue);
+                    Console.WriteLine("Step: "+Step);
+                    Console.WriteLine("StepValue: "+StepValue);
+                    Console.WriteLine();
+                    Console.WriteLine("Paused: "+!Runing);
+                    
+                }
             }
-            
+
 
             //Console.WriteLine(RenderTime);
-            
+
+            if (Step && StepValue <= 0)
+            {
+                Runing = false;
+                Step = false;
+                StepValue = 0;
+            }
+            else if (Step)
+            {
+                StepValue--;
+            }
+
             if (!Runing)
             {
                 return;
             }
+            if(Lag)
+            Thread.Sleep(LagValue);
+
+
+            
 
             base.OnRenderFrame(e);
 
@@ -207,14 +337,21 @@ namespace OpenTK_Pong_v2
 
             shader.Use();
 
-
+            if (!ball.Running)
+            {
+                ball.Start();
+            }
 
 
             //renderObject.Render2(shader, new Vector3(test, test2, 0),(_timer.Elapsed.Milliseconds/1)); 
             ball.GetPaddles(new Vector3(0,LeftStep,0),new Vector3(0,RightStep,0));
             ball.Render(shader,_timer.Elapsed.Ticks/25000);
 
-            
+            if(AutoRight)
+            RightStep = ball.PosY;
+
+            if (AutoLeft)
+                LeftStep = ball.PosY;
 
             RightPaddle.RenderObject.Render(shader, new Vector3(0,LeftStep,0));
             LeftPaddle.RenderObject.Render(shader, new Vector3(0, RightStep, 0));
