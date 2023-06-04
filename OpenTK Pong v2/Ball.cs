@@ -116,7 +116,7 @@ namespace OpenTK_Pong_v2
 
             
 
-           if (pos.Y<LeftPaddle.Y+0.12&&pos.Y>LeftPaddle.Y-0.12f&&pos.X<-0.85f&&timer2.ElapsedMilliseconds>300)
+           if (pos.Y<LeftPaddle.Y+0.12&&pos.Y>LeftPaddle.Y-0.12f&&pos.X<-0.85f&&pos.X>-0.9&&timer2.ElapsedMilliseconds>300)
            {
                 countOfBounces++;
               
@@ -140,7 +140,7 @@ namespace OpenTK_Pong_v2
                 new Thread(() => Console.Beep(3000, 25)).Start();
             }
 
-            if (pos.Y < RightPaddle.Y + 0.12 && pos.Y > RightPaddle.Y - 0.12f && pos.X > 0.85f && timer2.ElapsedMilliseconds > 300)
+            if (pos.Y < RightPaddle.Y + 0.12 && pos.Y > RightPaddle.Y - 0.12f && pos.X > 0.85f &&pos.X<0.9&& timer2.ElapsedMilliseconds > 300)
             {
                 countOfBounces++;
 

@@ -229,8 +229,12 @@ namespace OpenTK_Pong_v2
                         AutoRight = false;
                         Step = false;
                         StepValue=0;
+                        Console.Clear();
                         break;
-                    
+                    case "pause":
+                        Runing = !Runing;
+                        Console.Clear();
+                        break;
 
                 }
                 if (input.Contains("lag"))
@@ -265,12 +269,35 @@ namespace OpenTK_Pong_v2
                     Runing = true;
                 }
 
+                if (input.Contains("setballpos"))
+                {
+                    input = input.Split("setballpos")[1].Trim();
+                    if (input.Length > 0)
+                    {
+                        float.TryParse(input.Split(";")[0], out ball.PosX);
+                        float.TryParse(input.Split(";")[1], out ball.PosY);
+                        ball.Render(shader);
+                        Console.Clear();
+                    }
+                }
+                if (input.Contains("setballspeed"))
+                {
+                    input = input.Split("setballspeed")[1].Trim();
+                    if (input.Length > 0)
+                    {
+                        float.TryParse(input.Split(";")[0], out ball.SpeedX);
+                        float.TryParse(input.Split(";")[1], out ball.SpeedY);
+                        
+                        Console.Clear();
+                    }
+                }
+
             }
 
             if (fpsStopWatch.Elapsed.TotalMilliseconds >= 100)
             {
                 fps *= 10;
-                Title = "Skóre: " + ball.Score.X + "-" + ball.Score.Y + "   FPS: " +1000/RenderTime;//fps.ToString();
+                Title = "Skóre: " + ball.Score.X + "-" + ball.Score.Y + "   FPS: " +1/RenderTime;//fps.ToString();
                 fps = 0;
                 fpsStopWatch.Restart();
                 fpsStopWatch.Start();
@@ -279,26 +306,26 @@ namespace OpenTK_Pong_v2
                 {
                     Console.SetCursorPosition(0, 0);
 
-                    Console.WriteLine("RenderLatency: "+ (decimal)RenderTime);
+                    Console.WriteLine("RenderLatency: "+ (decimal)RenderTime+"           ");
                     
                     Console.WriteLine();
-                    Console.WriteLine("Ball pos: "+ball.myPos);
-                    Console.WriteLine("Ball speed: " + ball.SpeedX + " " + ball.SpeedY); 
+                    Console.WriteLine("Ball pos: "+ball.myPos+"           ");
+                    Console.WriteLine("Ball speed: " + ball.SpeedX + " " + ball.SpeedY+ "           "); 
                     Console.WriteLine();    
-                    Console.WriteLine("LPaddle pos: " + new Vector3(0, RightStep, 0));
+                    Console.WriteLine("LPaddle pos: " + new Vector3(0, RightStep, 0)+ "           ");
                     Console.WriteLine();
-                    Console.WriteLine("RPaddle pos: " + new Vector3(0, LeftStep, 0));
+                    Console.WriteLine("RPaddle pos: " + new Vector3(0, LeftStep, 0)+ "           ");
                     Console.WriteLine();
                     Console.WriteLine();
-                    Console.WriteLine("AutoLeft: " + AutoLeft);
-                    Console.WriteLine("AutoRight: " + AutoRight);
+                    Console.WriteLine("AutoLeft: " + AutoLeft+ "           ");
+                    Console.WriteLine("AutoRight: " + AutoRight+ "           ");
                     Console.WriteLine();
-                    Console.WriteLine("Lag: "+Lag);
-                    Console.WriteLine("LagValue: " + LagValue);
-                    Console.WriteLine("Step: "+Step);
-                    Console.WriteLine("StepValue: "+StepValue);
+                    Console.WriteLine("Lag: "+Lag+ "           ");
+                    Console.WriteLine("LagValue: " + LagValue+ "           ");
+                    Console.WriteLine("Step: "+Step+ "           ");
+                    Console.WriteLine("StepValue: "+StepValue+ "           ");
                     Console.WriteLine();
-                    Console.WriteLine("Paused: "+!Runing);
+                    Console.WriteLine("Paused: "+!Runing+ "           ");
                     
                 }
             }
