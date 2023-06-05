@@ -12,6 +12,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using System.ComponentModel;
 
 namespace OpenTK_Pong_v2
 {
@@ -68,9 +69,19 @@ namespace OpenTK_Pong_v2
 
             KeyboardState input = KeyboardState;
 
+            if (input.IsKeyPressed(Keys.End))
+            {
+                Close();
+            }
+
             if (input.IsKeyPressed(Keys.Escape))
             {
                 Runing = !Runing;
+                if (!Runing)
+                {
+                    Console.WriteLine("Hra pozastavena!");
+                }else
+                    Console.WriteLine("Hra spuštěna!");
             }
 
 
@@ -178,6 +189,12 @@ namespace OpenTK_Pong_v2
 
             _timer.Start();
             fpsStopWatch.Start();
+
+            new Thread(() => Settings.Beep(1000, 25)).Start();
+            new Thread(() => Settings.Beep(2000, 25)).Start();
+            new Thread(() => Settings.Beep(3000, 25)).Start();
+
+            Console.WriteLine("Inicializováno!");
         }
 
 
@@ -274,8 +291,8 @@ namespace OpenTK_Pong_v2
                     input = input.Split("setballpos")[1].Trim();
                     if (input.Length > 0)
                     {
-                        float.TryParse(input.Split(";")[0], out ball.PosX);
-                        float.TryParse(input.Split(";")[1], out ball.PosY);
+                        float.TryParse(input.Split(";")[0], out ball.myPos.X);
+                        float.TryParse(input.Split(";")[1], out ball.myPos.Y);
                         ball.Render(shader);
                         Console.Clear();
                     }
@@ -285,8 +302,8 @@ namespace OpenTK_Pong_v2
                     input = input.Split("setballspeed")[1].Trim();
                     if (input.Length > 0)
                     {
-                        float.TryParse(input.Split(";")[0], out ball.SpeedX);
-                        float.TryParse(input.Split(";")[1], out ball.SpeedY);
+                        float.TryParse(input.Split(";")[0], out ball.Speed.X);
+                        float.TryParse(input.Split(";")[1], out ball.Speed.Y);
                         
                         Console.Clear();
                     }
@@ -298,6 +315,7 @@ namespace OpenTK_Pong_v2
             {
                 fps *= 10;
                 Title = "Skóre: " + ball.Score.X + "-" + ball.Score.Y + "   FPS: " +1/RenderTime;//fps.ToString();
+                Settings.Score = ball.Score;
                 fps = 0;
                 fpsStopWatch.Restart();
                 fpsStopWatch.Start();
@@ -310,7 +328,7 @@ namespace OpenTK_Pong_v2
                     
                     Console.WriteLine();
                     Console.WriteLine("Ball pos: "+ball.myPos+"           ");
-                    Console.WriteLine("Ball speed: " + ball.SpeedX + " " + ball.SpeedY+ "           "); 
+                    Console.WriteLine("Ball speed: " + ball.Speed+ "           "); 
                     Console.WriteLine();    
                     Console.WriteLine("LPaddle pos: " + new Vector3(0, RightStep, 0)+ "           ");
                     Console.WriteLine();
@@ -347,6 +365,8 @@ namespace OpenTK_Pong_v2
             if (!Runing)
             {
                 return;
+
+                SwapBuffers();
             }
             if(Lag)
             Thread.Sleep(LagValue);
@@ -370,15 +390,14 @@ namespace OpenTK_Pong_v2
             }
 
 
-            //renderObject.Render2(shader, new Vector3(test, test2, 0),(_timer.Elapsed.Milliseconds/1)); 
             ball.GetPaddles(new Vector3(0,LeftStep,0),new Vector3(0,RightStep,0));
             ball.Render(shader,_timer.Elapsed.Ticks/25000);
 
             if(AutoRight)
-            RightStep = ball.PosY;
+            RightStep = ball.myPos.Y;
 
             if (AutoLeft)
-                LeftStep = ball.PosY;
+                LeftStep = ball.myPos.Y;
 
             RightPaddle.RenderObject.Render(shader, new Vector3(0,LeftStep,0));
             LeftPaddle.RenderObject.Render(shader, new Vector3(0, RightStep, 0));
@@ -421,6 +440,15 @@ namespace OpenTK_Pong_v2
             shader.Dispose();
         }
 
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            new Thread(() => Settings.Beep(3000, 25)).Start();
+            new Thread(() => Settings.Beep(2000, 25)).Start();
+            new Thread(() => Settings.Beep(1000, 25)).Start();
+        }
+
+       
 
     }
 }
