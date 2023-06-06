@@ -37,8 +37,8 @@ namespace OpenTK_Pong_v2
         {
             RenderObject = new RenderObject(vertices, OpenTK.Graphics.OpenGL4.BufferUsageHint.StreamDraw, indices);
             RenderObject2 = new RenderObject(vertices, OpenTK.Graphics.OpenGL4.BufferUsageHint.StreamDraw, indices);
-            RenderObject3 = new RenderObject(vertices, OpenTK.Graphics.OpenGL4.BufferUsageHint.StreamDraw, indices);
-            RenderObject4 = new RenderObject(vertices, OpenTK.Graphics.OpenGL4.BufferUsageHint.StreamDraw, indices);
+            RenderObject3 = new RenderObject(vertices, OpenTK.Graphics.OpenGL4.BufferUsageHint.DynamicDraw, indices);
+            RenderObject4 = new RenderObject(vertices, OpenTK.Graphics.OpenGL4.BufferUsageHint.DynamicDraw, indices);
         }
 
         public void Render(Shader shader, Stopwatch timer)
@@ -46,8 +46,8 @@ namespace OpenTK_Pong_v2
 
 
 
-            RenderObject.Render2(shader, new Vector3(0.5f * (float)Math.Sin(0.25f * MathHelper.DegreesToRadians(timer.ElapsedMilliseconds)), 0, 0), MathHelper.DegreesToRadians(timer.ElapsedMilliseconds));
-            RenderObject2.Render2(shader, new Vector3(-0.5f * (float)Math.Sin(0.25f * MathHelper.DegreesToRadians(timer.ElapsedMilliseconds)), 0, 0), MathHelper.DegreesToRadians(timer.ElapsedMilliseconds));
+            RenderObject.Render2(shader, new Vector3(0.5f * (float)Math.Sin(0.125f * MathHelper.DegreesToRadians(timer.ElapsedMilliseconds)), 0, 0), MathHelper.DegreesToRadians(timer.ElapsedMilliseconds));
+            RenderObject2.Render2(shader, new Vector3(-0.5f * (float)Math.Sin(0.125f * MathHelper.DegreesToRadians(timer.ElapsedMilliseconds)), 0, 0), MathHelper.DegreesToRadians(timer.ElapsedMilliseconds));
             RenderObject3.Render2(shader, new Vector3(0,-0.55f,  0), MathHelper.DegreesToRadians(-timer.ElapsedMilliseconds));
             RenderObject4.Render2(shader, new Vector3(0,0.55f,  0), MathHelper.DegreesToRadians(-timer.ElapsedMilliseconds));
         }
