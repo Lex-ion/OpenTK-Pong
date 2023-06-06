@@ -139,11 +139,56 @@
 
                         break;
 
+                    case 1:
+                        Console.Clear();
+                        Console.WriteLine("Inicializace...");
+                        using (ArcadeGame game = new ArcadeGame(800,800,"Game"))
+                        break;
+
+                    case 2:
+                        Settings.Menu();
+                        break;
+
+                    case 3:
+                        string[] text = SetString();
+                        Console.Clear();
+                        for (int i = 0; i < text.Length; i++)
+                        {
+                            Console.WriteLine(text[i]);
+                            Thread.Sleep(25);
+                        }
+                        Console.ReadKey(true);
+
+                        break;
+
                     case 4:
                         Environment.Exit(0);
                         break;
                 }
+
+                string[] SetString()
+                {
+                    string data="";
+
+                    data += "Pálky se ovládají pomocí WSAD a šipek.#-#";
+                    data += "Klávesy A a D zrychlují či zpomalují pálky, stejné platí i u šipek.#-#";
+                    data += "Hru lze pozastavit pomocí klávesy ESC a ukončit pomocí klávesy END.#-#";
+                    data += "#-#";
+                    data += "Obtížnost hry pro jednoho hráče lze upravit v nastavení.#-#";
+                    data += "   0 - arkádový mód#-#";
+                    data += "   1 - lehká obtížnost#-#";
+                    data += "   2 - střední obtížnost#-#";
+                    data += "   3 - těžká obtížnost#-#";
+                    data += "#-#";
+                    data += "Stiskni klávesu pro návrat do menu...";
+                    
+                    
+
+                    return data.Split("#-#");
+                }
             }
+
+
         }
     }
 }

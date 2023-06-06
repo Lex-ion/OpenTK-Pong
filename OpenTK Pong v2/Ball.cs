@@ -193,7 +193,7 @@ namespace OpenTK_Pong_v2
         /// <summary>
         /// Sets position vector and speed vector
         /// </summary>
-        public void Start()
+        public void Start(float X = 0, float Y = 0)
         {
             Running = true;
 
@@ -217,7 +217,7 @@ namespace OpenTK_Pong_v2
 
 
             Speed = new Vector3((float)Math.Cos(angleInRad)* 0.0001f,(float)Math.Sin(angleInRad) *  0.0001f, 0);
-            myPos = new Vector3(0, 0, 0);
+            myPos = new Vector3(X, Y, 0);
 
             Settings.Beep(1000, 50);
         }

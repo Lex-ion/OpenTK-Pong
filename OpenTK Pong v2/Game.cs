@@ -46,6 +46,8 @@ namespace OpenTK_Pong_v2
         Paddle RightPaddle;
         Paddle LeftPaddle;
 
+        PauseObject PauseObject;
+
         bool Runing = true;
 
 
@@ -152,6 +154,7 @@ namespace OpenTK_Pong_v2
 
             RightPaddle = new Paddle(true);
             LeftPaddle = new Paddle(false);
+            PauseObject = new PauseObject();
 
             ball = new Ball();
 
@@ -364,9 +367,10 @@ namespace OpenTK_Pong_v2
 
             if (!Runing)
             {
-                return;
 
+                PauseObject.Render(shader,_timer);
                 SwapBuffers();
+                return;
             }
             if(Lag)
             Thread.Sleep(LagValue);
