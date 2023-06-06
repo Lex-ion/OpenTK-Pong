@@ -368,7 +368,9 @@ namespace OpenTK_Pong_v2
             if (!Runing)
             {
 
+                
                 PauseObject.Render(shader,_timer);
+               
                 SwapBuffers();
                 return;
             }

@@ -19,13 +19,13 @@ namespace OpenTK_Pong_v2
     {
         RenderObject RenderObject;
         RenderObject RenderObject2;
-        RenderObject RenderObject3; 
+        RenderObject RenderObject3;
         RenderObject RenderObject4;
 
         public float[] vertices = {
      0.025f,  0.025f, 0.0f,   1.0f, 0, 0000,  // top right
      0.025f, -0.025f, 0.0f,   0000, 1.0f, 0, // bottom right
-    -0.025f, -0.025f, 0.0f,   0, 0000, 1.0f, // bottom left
+    -0.025f, -0.025f, 0.0f,   0000, 0000, 1.0f, // bottom left
     -0.025f,  0.025f, 0.0f,   1.0f, 0, 0000 // top left
         };
         public uint[] indices = {  // note that we start from 0!
@@ -46,10 +46,11 @@ namespace OpenTK_Pong_v2
 
 
 
-            RenderObject.Render2(shader,new Vector3(0.5f,0,0),MathHelper.DegreesToRadians(timer.ElapsedMilliseconds)); 
-            RenderObject2.Render2(shader, new Vector3(-0.5f, 0, 0), MathHelper.DegreesToRadians(timer.ElapsedMilliseconds));
-            RenderObject3.Render2(shader, new Vector3(-0.25f, 0, 0), MathHelper.DegreesToRadians(-timer.ElapsedMilliseconds));
-            RenderObject4.Render2(shader, new Vector3(0.25f, 0, 0), MathHelper.DegreesToRadians(-timer.ElapsedMilliseconds));
+            RenderObject.Render2(shader, new Vector3(0.5f * (float)Math.Sin(0.25f * MathHelper.DegreesToRadians(timer.ElapsedMilliseconds)), 0, 0), MathHelper.DegreesToRadians(timer.ElapsedMilliseconds));
+            RenderObject2.Render2(shader, new Vector3(-0.5f * (float)Math.Sin(0.25f * MathHelper.DegreesToRadians(timer.ElapsedMilliseconds)), 0, 0), MathHelper.DegreesToRadians(timer.ElapsedMilliseconds));
+            RenderObject3.Render2(shader, new Vector3(0,-0.55f,  0), MathHelper.DegreesToRadians(-timer.ElapsedMilliseconds));
+            RenderObject4.Render2(shader, new Vector3(0,0.55f,  0), MathHelper.DegreesToRadians(-timer.ElapsedMilliseconds));
         }
+
     }
 }
