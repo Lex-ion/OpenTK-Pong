@@ -41,7 +41,7 @@ namespace OpenTK_Pong_v2
         bool Step = false;
         int StepValue = 0;
 
-        int Score=0;
+        
 
         public ArcadeGame(int width, int height, string title) : base(GameWindowSettings.Default, new NativeWindowSettings() { Size = (width, height), Title = title })
         {
@@ -128,16 +128,18 @@ namespace OpenTK_Pong_v2
             
             Shader = new Shader("shader.vert", "shader.frag");
 
-            LeftPaddle = new Paddle(false);
+            LeftPaddle = new Paddle(true);
             PauseObject = new PauseObject();
 
 
-            Balls.Add(new Ball());
+            Balls.Add(new Ball(true));
 
             Timer = new Stopwatch();
             Timer.Start();
             FPSTimer = new Stopwatch();
             FPSTimer.Start();
+
+            
 
             new Thread(() => Settings.Beep(1000, 25)).Start();
             new Thread(() => Settings.Beep(2000, 25)).Start();
@@ -210,8 +212,8 @@ namespace OpenTK_Pong_v2
             if (FPSTimer.Elapsed.TotalMilliseconds >= 100)
             {
                 fps *= 10;
-                Title = "Skóre: " + Score +  "   FPS: " + 1 / RenderTime;//fps.ToString();
-                Settings.Score = new Vector2(Score);
+                Title = "FPS: " + 1 / RenderTime;//fps.ToString();
+
                 fps = 0;
                 FPSTimer.Restart();
                 FPSTimer.Start();
@@ -272,6 +274,36 @@ namespace OpenTK_Pong_v2
 
 
             Shader.Use();
+
+            int ballsToAdd = 0;
+            foreach (Ball ball in Balls)
+            {
+                ball.GetPaddles(new Vector3(0,RightStep,0), ball.myPos);
+                ball.Render(Shader, Timer.Elapsed.Ticks / 25000);
+                if (ball.TouchedPaddle)
+                {
+                    ball.TouchedPaddle = false;
+                    Random rnd = new Random();
+                    if (rnd.NextDouble() > 0.55)
+                    {
+                        ballsToAdd++;
+                        new Thread(() => Settings.Beep(2750, 15)).Start();
+                        new Thread(() => Settings.Beep(2750, 15)).Start();
+                    }
+                }
+
+                if (!ball.Alive)
+                {
+                    Close();
+                }
+            }
+            for (int i = 0; i < ballsToAdd; i++)
+            {
+                Random rnd = new Random();
+                Balls.Add(new Ball(true));
+                Balls[Balls.Count - 1].Start((float)rnd.Next(-30, 80) / 100, (float)rnd.Next(-90, 90) / 100);
+            }
+
 
             LeftPaddle.RenderObject.Render(Shader, new Vector3(0, RightStep, 0));
 

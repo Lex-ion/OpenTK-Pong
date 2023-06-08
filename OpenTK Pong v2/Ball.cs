@@ -14,6 +14,8 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace OpenTK_Pong_v2
 {
+   
+
     internal class Ball
     {
 
@@ -56,20 +58,25 @@ namespace OpenTK_Pong_v2
 
        public Vector2 Score = new Vector2(0, 0);
 
-        public Ball()
+        public bool ArcadeMode { get; set; }
+        public bool TouchedPaddle = false;
+        public bool Alive = true;
+
+        public Ball(bool arcadeMode=false)
         {
             RenderObject = new RenderObject(vertices, OpenTK.Graphics.OpenGL4.BufferUsageHint.StreamDraw, indices);
             timer.Start();
             timer2.Start();
             Start();
+            ArcadeMode = arcadeMode;
         }
 
-    /// <summary>
-    /// Check if ball is inside of the game field and renders it
-    /// </summary>
-    /// <param name="shader">Shader for rendering</param>
-    /// <param name="deg">Rotation in radians</param>
-    /// <param name="sca">Scale factor</param>
+        /// <summary>
+        /// Check if ball is inside of the game field and renders it
+        /// </summary>
+        /// <param name="shader">Shader for rendering</param>
+        /// <param name="deg">Rotation in radians</param>
+        /// <param name="sca">Scale factor</param>
         public void Render(Shader shader, float deg = 0, float sca=1)
         {
             myPos += Speed;
@@ -122,7 +129,11 @@ namespace OpenTK_Pong_v2
                     Score.X++;
                 }
                 else
+                {
                     Score.Y++;
+                    Alive = false;
+                }
+                    
 
                 Start();
 
@@ -133,6 +144,7 @@ namespace OpenTK_Pong_v2
            if (pos.Y<LeftPaddle.Y+0.12&&pos.Y>LeftPaddle.Y-0.12f&&pos.X<-0.85f&&pos.X>-0.9&&timer2.ElapsedMilliseconds>300) //leftpaddle check
            {
                 countOfBounces++;
+                if(!ArcadeMode)
                 Speed *= 1.05f;
                 Speed.X *= -1;
 
@@ -147,7 +159,11 @@ namespace OpenTK_Pong_v2
                     Speed.Y += speedDif;
                 }
                 
-
+                if (ArcadeMode)
+                {
+                    Settings.Score.X +=1 ;
+                    TouchedPaddle = true;
+                }
 
                 timer2.Reset();
                 timer2.Start();
@@ -162,6 +178,7 @@ namespace OpenTK_Pong_v2
             {
                 
                 countOfBounces++;
+                if(!ArcadeMode)
                 Speed *= 1.05f;
                 Speed.X *= -1;
 

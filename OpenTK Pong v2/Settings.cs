@@ -13,7 +13,7 @@ namespace OpenTK_Pong_v2
     internal class Settings
     {
         public static bool Sounds = false;
-        public static Vector2 Score;
+        public static Vector2 Score= new Vector2(0,0);
 
         public static int AIDif = 2;
 

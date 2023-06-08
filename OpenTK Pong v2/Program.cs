@@ -135,6 +135,7 @@
                             game.Run();
                         }
                         Console.WriteLine($"Hra ukončena! Skóre: {Settings.Score} \nStiskni klávesu pro návrat...");
+                        Thread.Sleep(500);
                         Console.ReadKey();
 
                         break;
@@ -142,7 +143,13 @@
                     case 1:
                         Console.Clear();
                         Console.WriteLine("Inicializace...");
-                        using (ArcadeGame game = new ArcadeGame(800,800,"Game"))
+                        using (ArcadeGame game = new ArcadeGame(800, 800, "Game"))
+                        {
+                            game.Run();
+                        }
+                        Console.WriteLine($"Hra ukončena! Skóre: {Settings.Score.X} \nStiskni klávesu pro návrat...");
+                        Thread.Sleep(1000);
+                        Console.ReadKey();
                         break;
 
                     case 2:
