@@ -143,7 +143,7 @@
                     case 1:
                         Console.Clear();
                         Console.WriteLine("Inicializace...");
-                        using (ArcadeGame game = new ArcadeGame(800, 800, "Game"))
+                        using (SinglePlayer game = new SinglePlayer(800, 800, "Game"))
                         {
                             game.Run();
                         }

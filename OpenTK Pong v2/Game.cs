@@ -193,6 +193,8 @@ namespace OpenTK_Pong_v2
             _timer.Start();
             fpsStopWatch.Start();
 
+            
+
             new Thread(() => Settings.Beep(1000, 25)).Start();
             new Thread(() => Settings.Beep(2000, 25)).Start();
             new Thread(() => Settings.Beep(3000, 25)).Start();
@@ -331,7 +333,8 @@ namespace OpenTK_Pong_v2
                     
                     Console.WriteLine();
                     Console.WriteLine("Ball pos: "+ball.myPos+"           ");
-                    Console.WriteLine("Ball speed: " + ball.Speed+ "           "); 
+                    Console.WriteLine("Ball speed: " + ball.Speed+ "           ");
+                    Console.WriteLine("Count of bounces: "+ball.countOfBounces+"          ");
                     Console.WriteLine();    
                     Console.WriteLine("LPaddle pos: " + new Vector3(0, RightStep, 0)+ "           ");
                     Console.WriteLine();

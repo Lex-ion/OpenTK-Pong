@@ -6,17 +6,15 @@ using System.Threading.Tasks;
 
 
 using System.Diagnostics;
-using OpenTK.Graphics.OpenGL4;
+
 using OpenTK.Mathematics;
-using OpenTK.Windowing.Desktop;
-using OpenTK.Windowing.Common;
-using OpenTK.Windowing.GraphicsLibraryFramework;
+
 
 namespace OpenTK_Pong_v2
 {
    
 
-    internal class Ball
+    internal class Ball : ICloneable
     {
 
         public RenderObject RenderObject;
@@ -24,7 +22,7 @@ namespace OpenTK_Pong_v2
         Stopwatch timer = new Stopwatch(); 
         Stopwatch timer2 = new Stopwatch();
 
-        int countOfBounces = 0;
+       public int countOfBounces = 0;
 
         public float[] vertices = {
      0.025f,  0.025f, 0.0f,   1.0f, 1.0f, 0000,  // top right
@@ -39,11 +37,8 @@ namespace OpenTK_Pong_v2
         };
 
         
-        public float SpeedX = -0.00015f;
-        public float SpeedY = 0.0001f;
+    
 
-        public float PosX = 0;
-        public float PosY = 0;
 
         Vector3 LeftPaddle;
         Vector3 RightPaddle;
@@ -53,6 +48,7 @@ namespace OpenTK_Pong_v2
 
 
         int rotator = 1;
+       
 
        public bool Running = false;
 
@@ -61,6 +57,11 @@ namespace OpenTK_Pong_v2
         public bool ArcadeMode { get; set; }
         public bool TouchedPaddle = false;
         public bool Alive = true;
+
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
 
         public Ball(bool arcadeMode=false)
         {
@@ -144,7 +145,7 @@ namespace OpenTK_Pong_v2
            if (pos.Y<LeftPaddle.Y+0.12&&pos.Y>LeftPaddle.Y-0.12f&&pos.X<-0.85f&&pos.X>-0.9&&timer2.ElapsedMilliseconds>300) //leftpaddle check
            {
                 countOfBounces++;
-                if(!ArcadeMode)
+                if(!ArcadeMode&&countOfBounces<41)
                 Speed *= 1.05f;
                 Speed.X *= -1;
 
@@ -162,8 +163,10 @@ namespace OpenTK_Pong_v2
                 if (ArcadeMode)
                 {
                     Settings.Score.X +=1 ;
-                    TouchedPaddle = true;
+                    
                 }
+
+                TouchedPaddle = true;
 
                 timer2.Reset();
                 timer2.Start();
@@ -178,7 +181,7 @@ namespace OpenTK_Pong_v2
             {
                 
                 countOfBounces++;
-                if(!ArcadeMode)
+                if(!ArcadeMode&&countOfBounces<41)
                 Speed *= 1.05f;
                 Speed.X *= -1;
 
@@ -212,6 +215,9 @@ namespace OpenTK_Pong_v2
         /// </summary>
         public void Start(float X = 0, float Y = 0)
         {
+            Console.WriteLine(countOfBounces);
+            countOfBounces = 0;
+
             Running = true;
 
             Random rnd = new Random();
@@ -248,6 +254,13 @@ namespace OpenTK_Pong_v2
         {
             LeftPaddle = leftPaddle;
             RightPaddle = rightPaddle;
+        }
+
+        public void NoRenderRender()
+        {
+            myPos += Speed;
+
+            CheckForBorder(myPos);
         }
         
     }

@@ -76,46 +76,24 @@ namespace OpenTK_Pong_v2
 
 
             float RightStepSize = 0.0004f;
-            if (input.IsKeyDown(Keys.Right))
+            if (input.IsKeyDown(Keys.Right)|| input.IsKeyDown(Keys.D))
             {
                 RightStepSize = 0.00009f;
             }
-            else if (input.IsKeyDown(Keys.Left))
+            else if (input.IsKeyDown(Keys.Left) || input.IsKeyDown(Keys.A))
             {
                 RightStepSize = 0.001f;
             }
 
 
-            if (input.IsKeyDown(Keys.Up) && RightStep <= 0.88)
+            if ((input.IsKeyDown(Keys.Up) || input.IsKeyDown(Keys.W)) && RightStep <= 0.88)
             {
                 RightStep += RightStepSize;
             }
-            if (input.IsKeyDown(Keys.Down) && RightStep >= -0.88)
+            if ((input.IsKeyDown(Keys.Down)|| input.IsKeyDown(Keys.S ))&& RightStep >= -0.88)
             {
                 RightStep -= RightStepSize;
             }
-
-
-            float LeftStepSize = 0.0004f;
-            if (input.IsKeyDown(Keys.D))
-            {
-                LeftStepSize = 0.00009f;
-            }
-            else if (input.IsKeyDown(Keys.A))
-            {
-                LeftStepSize = 0.001f;
-            }
-
-
-            if (input.IsKeyDown(Keys.W) && LeftStep <= 0.88)
-            {
-                LeftStep += LeftStepSize;
-            }
-            if (input.IsKeyDown(Keys.S) && LeftStep >= -0.88)
-            {
-                LeftStep -= LeftStepSize;
-            }
-
 
         }
 
@@ -139,7 +117,8 @@ namespace OpenTK_Pong_v2
             FPSTimer = new Stopwatch();
             FPSTimer.Start();
 
-            
+
+            Settings.Score = new Vector2(0, 0);
 
             new Thread(() => Settings.Beep(1000, 25)).Start();
             new Thread(() => Settings.Beep(2000, 25)).Start();
