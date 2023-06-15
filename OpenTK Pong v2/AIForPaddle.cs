@@ -85,11 +85,11 @@ namespace OpenTK_Pong_v2
 
             }
 
-             while(true)
-             while (CanIdle)
-             {   
-                     Idle();
-             }
+           //  while(true)
+           //  while (CanIdle)
+           //  {   
+           //          Idle();
+           //  }
 
         }
         bool up = true;
