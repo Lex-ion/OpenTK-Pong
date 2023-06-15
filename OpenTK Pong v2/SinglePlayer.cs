@@ -30,7 +30,9 @@ namespace OpenTK_Pong_v2
         Stopwatch Timer;
         Stopwatch FPSTimer;
 
+        AIForPaddle AI;
 
+        Thread PredictThread;
 
         bool Debugging = false;
         bool AutoLeft = false;
@@ -67,6 +69,10 @@ namespace OpenTK_Pong_v2
             Running = true;
 
             Settings.Score = new Vector2(0, 0);
+
+            AI = new AIForPaddle();
+            new Thread(() => AI.Initialize()).Start();
+
 
             new Thread(() => Settings.Beep(1000, 25)).Start();
             new Thread(() => Settings.Beep(2000, 25)).Start();
@@ -270,6 +276,7 @@ namespace OpenTK_Pong_v2
                 RightStep = Ball.myPos.Y;
             }
 
+            LeftStep = AI.MyStep;
 
             Ball.GetPaddles(new Vector3(0, RightStep, 0), new Vector3(0, LeftStep, 0));
             Ball.Render(Shader, Timer.Elapsed.Ticks / 25000);
@@ -279,14 +286,28 @@ namespace OpenTK_Pong_v2
 
             if (Ball.TouchedPaddle)
             {
-
-
                 Ball.TouchedPaddle = false;
+                AI.CanIdle = false;
 
-
-                new Thread(() => LeftStep = AIForPaddle.PredictPos(Ball).Y).Start();
-
-
+                
+                PredictThread = new Thread(new ThreadStart(() => AI.PredictPos(Ball)));
+                PredictThread.Start();
+            }
+            if (Ball.Started)
+            {
+                Ball.Started = false;
+                if (Ball.Speed.X > 0)
+                {
+                    AI.CanIdle=false;
+                    
+                    PredictThread = new Thread(new ThreadStart(() => AI.PredictPos(Ball)));
+                    PredictThread.Start();
+                }
+            }
+            if (Ball.Speed.X < 0)
+            {
+                AI.CanIdle = true;
+                AI.AwaitingImpact = false;
             }
 
             GL.UseProgram(Shader.Handle);

@@ -7,10 +7,10 @@ namespace OpenTK_Pong_v2
 {
     internal class Settings
     {
-        public static bool Sounds = false;
+        public static bool Sounds = true    ;
         public static Vector2 Score = new Vector2(0, 0);
 
-        public static int AIDif = 2;
+        public static int AIDif = 0;
 
         public static void Beep(int frequency, int duration)
         {
@@ -28,7 +28,7 @@ namespace OpenTK_Pong_v2
 
             string[] Lines = {
                "  Zvuky  ",
-               "Obtížnost",
+               "  Režim  ",
                "  Zpět  "
             };
 
@@ -98,7 +98,7 @@ namespace OpenTK_Pong_v2
                         Sounds = !Sounds;
                         break;
                     case 1:
-                        if (AIDif >= 3)
+                        if (AIDif >= 1)
                         {
                             AIDif = 0;
                         }

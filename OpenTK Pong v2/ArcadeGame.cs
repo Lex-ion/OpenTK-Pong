@@ -263,11 +263,11 @@ namespace OpenTK_Pong_v2
                 {
                     ball.TouchedPaddle = false;
                     Random rnd = new Random();
-                    if (rnd.NextDouble() > 0.55)
+                    if (rnd.NextDouble() > 0.7)
                     {
                         ballsToAdd++;
                         new Thread(() => Settings.Beep(2750, 15)).Start();
-                        new Thread(() => Settings.Beep(2750, 15)).Start();
+                        new Thread(() => Settings.Beep(3750, 15)).Start();
                     }
                 }
 

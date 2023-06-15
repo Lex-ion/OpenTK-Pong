@@ -145,11 +145,26 @@
                     case 1:
                         Console.Clear();
                         Console.WriteLine("Inicializace...");
-                        using (SinglePlayer game = new SinglePlayer(800, 800, "Game"))
+
+                        switch (Settings.AIDif)
                         {
-                            game.Run();
+                            case 0:
+                                using (ArcadeGame game = new ArcadeGame(800, 800, "Game"))
+                                {
+                                    game.Run();
+                                }
+                                Console.WriteLine($"Hra ukončena! Skóre: {Settings.Score.X} \nStiskni klávesu pro návrat...");
+                                break;
+
+                            case 1:
+                                using (SinglePlayer game = new SinglePlayer(800, 800, "Game"))
+                                {
+                                    game.Run();
+                                }
+                                Console.WriteLine($"Hra ukončena! Skóre: {Settings.Score} \nStiskni klávesu pro návrat...");
+                                break;
                         }
-                        Console.WriteLine($"Hra ukončena! Skóre: {Settings.Score.X} \nStiskni klávesu pro návrat...");
+                        
                         Thread.Sleep(1000);
                         Console.ReadKey();
                         break;
@@ -183,11 +198,9 @@
                     data += "Klávesy A a D zrychlují či zpomalují pálky, stejné platí i u šipek.#-#";
                     data += "Hru lze pozastavit pomocí klávesy ESC a ukončit pomocí klávesy END.#-#";
                     data += "#-#";
-                    data += "Obtížnost hry pro jednoho hráče lze upravit v nastavení.#-#";
+                    data += "Režimy hry pro jednoho hráče lze upravit v nastavení.#-#";
                     data += "   0 - arkádový mód#-#";
-                    data += "   1 - lehká obtížnost#-#";
-                    data += "   2 - střední obtížnost#-#";
-                    data += "   3 - těžká obtížnost#-#";
+                    data += "   1 - pálka řízená počítačem (není zcela funkční; nedoděláno)#-#";        
                     data += "#-#";
                     data += "Stiskni klávesu pro návrat do menu...";
 
