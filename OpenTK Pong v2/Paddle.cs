@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-
-namespace OpenTK_Pong_v2
+﻿namespace OpenTK_Pong_v2
 {
     internal class Paddle
     {
-        public float[] Vertices {get; set;}
-        public uint[] Indices {get; set;}
+        public float[] Vertices { get; set; }
+        public uint[] Indices { get; set; }
         public RenderObject RenderObject;
 
 
@@ -50,7 +42,7 @@ namespace OpenTK_Pong_v2
         }
 
 
-        
+
 
 
     }

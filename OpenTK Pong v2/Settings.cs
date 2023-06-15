@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 
 using OpenTK.Mathematics;
 
@@ -13,7 +8,7 @@ namespace OpenTK_Pong_v2
     internal class Settings
     {
         public static bool Sounds = false;
-        public static Vector2 Score= new Vector2(0,0);
+        public static Vector2 Score = new Vector2(0, 0);
 
         public static int AIDif = 2;
 
@@ -29,7 +24,7 @@ namespace OpenTK_Pong_v2
         {
             int Choice = 0;
 
-           
+
 
             string[] Lines = {
                "  Zvuky  ",
@@ -72,7 +67,7 @@ namespace OpenTK_Pong_v2
 
             void Render()
             {
-                Object[] Values = {Sounds, AIDif," "};
+                Object[] Values = { Sounds, AIDif, " " };
 
                 Console.Clear();
                 for (int i = 0; i < Lines.Length; i++)
@@ -88,10 +83,10 @@ namespace OpenTK_Pong_v2
                     else
                     {
 
-                        Console.Write("  " + Lines[i]+"  ");
+                        Console.Write("  " + Lines[i] + "  ");
                     }
 
-                    Console.WriteLine("  "+Values[i]);
+                    Console.WriteLine("  " + Values[i]);
                 }
             }
 

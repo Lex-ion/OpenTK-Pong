@@ -33,7 +33,7 @@ namespace OpenTK_Pong_v2
 
             GL.CompileShader(FragmentShader);
 
-            GL.GetShader(FragmentShader, ShaderParameter.CompileStatus, out  success);
+            GL.GetShader(FragmentShader, ShaderParameter.CompileStatus, out success);
             if (success == 0)
             {
                 string infoLog = GL.GetShaderInfoLog(FragmentShader);
@@ -48,7 +48,7 @@ namespace OpenTK_Pong_v2
 
             GL.LinkProgram(Handle);
 
-            GL.GetProgram(Handle, GetProgramParameterName.LinkStatus, out  success);
+            GL.GetProgram(Handle, GetProgramParameterName.LinkStatus, out success);
             if (success == 0)
             {
                 string infoLog = GL.GetProgramInfoLog(Handle);
@@ -87,7 +87,7 @@ namespace OpenTK_Pong_v2
             }
         }
 
-        
+
         public void Dispose()
         {
             Dispose(true);

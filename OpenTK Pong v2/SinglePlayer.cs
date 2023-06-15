@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using System.Diagnostics;
+﻿
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
-using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace OpenTK_Pong_v2
 {
@@ -26,8 +21,8 @@ namespace OpenTK_Pong_v2
         Paddle LeftPaddle;
         Paddle RightPaddle;
 
-        float LeftStep=0;
-        float RightStep=0;
+        float LeftStep = 0;
+        float RightStep = 0;
 
         PauseObject PauseObject;
         bool Running;
@@ -272,26 +267,26 @@ namespace OpenTK_Pong_v2
 
             if (AutoLeft)
             {
-                RightStep = Ball.myPos.Y;   
+                RightStep = Ball.myPos.Y;
             }
-            
-            
-                Ball.GetPaddles(new Vector3(0, RightStep, 0), new Vector3(0, LeftStep, 0));
-                Ball.Render(Shader, Timer.Elapsed.Ticks / 25000);
-                
-                LeftPaddle.RenderObject.Render(Shader, new Vector3(0, RightStep, 0));
-                RightPaddle.RenderObject.Render(Shader, new Vector3(0, LeftStep, 0));
+
+
+            Ball.GetPaddles(new Vector3(0, RightStep, 0), new Vector3(0, LeftStep, 0));
+            Ball.Render(Shader, Timer.Elapsed.Ticks / 25000);
+
+            LeftPaddle.RenderObject.Render(Shader, new Vector3(0, RightStep, 0));
+            RightPaddle.RenderObject.Render(Shader, new Vector3(0, LeftStep, 0));
 
             if (Ball.TouchedPaddle)
             {
-                
+
 
                 Ball.TouchedPaddle = false;
-                
+
 
                 new Thread(() => LeftStep = AIForPaddle.PredictPos(Ball).Y).Start();
 
-                
+
             }
 
             GL.UseProgram(Shader.Handle);
@@ -299,7 +294,7 @@ namespace OpenTK_Pong_v2
             SwapBuffers();
         }
 
-      
+
 
         protected override void OnUpdateFrame(FrameEventArgs args)
         {

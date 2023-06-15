@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 
-
-using System.Diagnostics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
-using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace OpenTK_Pong_v2
 {
     internal class Game : GameWindow
     {
 
-       
+
 
 
         private float[] vertices =
@@ -58,12 +53,12 @@ namespace OpenTK_Pong_v2
         bool AutoLeft = false;
         bool AutoRight = false;
         bool Lag = false;
-        int LagValue=0;
+        int LagValue = 0;
         bool Step = false;
         int StepValue = 0;
 
         public Game(int width, int height, string title) : base(GameWindowSettings.Default, new NativeWindowSettings() { Size = (width, height), Title = title })
-        {  
+        {
         }
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
@@ -82,7 +77,8 @@ namespace OpenTK_Pong_v2
                 if (!Runing)
                 {
                     Console.WriteLine("Hra pozastavena!");
-                }else
+                }
+                else
                     Console.WriteLine("Hra spuštěna!");
             }
 
@@ -96,21 +92,21 @@ namespace OpenTK_Pong_v2
             float RightStepSize = 0.0004f;
             if (input.IsKeyDown(Keys.Right))
             {
-               RightStepSize = 0.00009f;
+                RightStepSize = 0.00009f;
             }
             else if (input.IsKeyDown(Keys.Left))
             {
-               RightStepSize = 0.001f;
+                RightStepSize = 0.001f;
             }
 
 
-            if (input.IsKeyDown(Keys.Up) &&RightStep <= 0.88)
+            if (input.IsKeyDown(Keys.Up) && RightStep <= 0.88)
             {
                 RightStep += RightStepSize;
             }
-            if (input.IsKeyDown(Keys.Down) &&RightStep >= -0.88)
+            if (input.IsKeyDown(Keys.Down) && RightStep >= -0.88)
             {
-                RightStep -=RightStepSize;
+                RightStep -= RightStepSize;
             }
 
 
@@ -125,7 +121,7 @@ namespace OpenTK_Pong_v2
             }
 
 
-            if (input.IsKeyDown(Keys.W)&&LeftStep<=0.88)
+            if (input.IsKeyDown(Keys.W) && LeftStep <= 0.88)
             {
                 LeftStep += LeftStepSize;
             }
@@ -143,14 +139,14 @@ namespace OpenTK_Pong_v2
 
             GL.ClearColor(0, 0, 0, 1.0f);
 
-          //  VertexBufferObject = GL.GenBuffer();
-          //  GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBufferObject);//vytvori buffer
-          //  GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.DynamicDraw); //kopiruje buffer do pameti na GPU; Dynamic -> caste zmeny (zajistuje "prioritu" v pameti) 
+            //  VertexBufferObject = GL.GenBuffer();
+            //  GL.BindBuffer(BufferTarget.ArrayBuffer, VertexBufferObject);//vytvori buffer
+            //  GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.DynamicDraw); //kopiruje buffer do pameti na GPU; Dynamic -> caste zmeny (zajistuje "prioritu" v pameti) 
 
             shader = new Shader("shader.vert", "shader.frag");
 
-          // renderObject = new RenderObject(ball.vertices, BufferUsageHint.DynamicDraw, ball.indices);
-          // renderObject2 = new RenderObject(ball.vertices, BufferUsageHint.DynamicDraw, ball.indices);
+            // renderObject = new RenderObject(ball.vertices, BufferUsageHint.DynamicDraw, ball.indices);
+            // renderObject2 = new RenderObject(ball.vertices, BufferUsageHint.DynamicDraw, ball.indices);
 
             RightPaddle = new Paddle(true);
             LeftPaddle = new Paddle(false);
@@ -193,7 +189,7 @@ namespace OpenTK_Pong_v2
             _timer.Start();
             fpsStopWatch.Start();
 
-            
+
 
             new Thread(() => Settings.Beep(1000, 25)).Start();
             new Thread(() => Settings.Beep(2000, 25)).Start();
@@ -208,11 +204,11 @@ namespace OpenTK_Pong_v2
         {
             fps += 1;
 
-           
+
 
             if (Console.KeyAvailable)
             {
-                string input= Console.ReadLine();
+                string input = Console.ReadLine();
 
                 switch (input.ToLower())
                 {
@@ -250,7 +246,7 @@ namespace OpenTK_Pong_v2
                         AutoLeft = false;
                         AutoRight = false;
                         Step = false;
-                        StepValue=0;
+                        StepValue = 0;
                         Console.Clear();
                         break;
                     case "pause":
@@ -265,8 +261,9 @@ namespace OpenTK_Pong_v2
                     if (input.Length <= 0)
                     {
                         Lag = false;
-                        
-                    }else
+
+                    }
+                    else
                     {
                         int.TryParse(input, out LagValue);
                         Lag = true;
@@ -309,7 +306,7 @@ namespace OpenTK_Pong_v2
                     {
                         float.TryParse(input.Split(";")[0], out ball.Speed.X);
                         float.TryParse(input.Split(";")[1], out ball.Speed.Y);
-                        
+
                         Console.Clear();
                     }
                 }
@@ -319,7 +316,7 @@ namespace OpenTK_Pong_v2
             if (fpsStopWatch.Elapsed.TotalMilliseconds >= 100)
             {
                 fps *= 10;
-                Title = "Skóre: " + ball.Score.X + "-" + ball.Score.Y + "   FPS: " +1/RenderTime;//fps.ToString();
+                Title = "Skóre: " + ball.Score.X + "-" + ball.Score.Y + "   FPS: " + 1 / RenderTime;//fps.ToString();
                 Settings.Score = ball.Score;
                 fps = 0;
                 fpsStopWatch.Restart();
@@ -329,28 +326,28 @@ namespace OpenTK_Pong_v2
                 {
                     Console.SetCursorPosition(0, 0);
 
-                    Console.WriteLine("RenderLatency: "+ (decimal)RenderTime+"           ");
-                    
+                    Console.WriteLine("RenderLatency: " + (decimal)RenderTime + "           ");
+
                     Console.WriteLine();
-                    Console.WriteLine("Ball pos: "+ball.myPos+"           ");
-                    Console.WriteLine("Ball speed: " + ball.Speed+ "           ");
-                    Console.WriteLine("Count of bounces: "+ball.countOfBounces+"          ");
-                    Console.WriteLine();    
-                    Console.WriteLine("LPaddle pos: " + new Vector3(0, RightStep, 0)+ "           ");
+                    Console.WriteLine("Ball pos: " + ball.myPos + "           ");
+                    Console.WriteLine("Ball speed: " + ball.Speed + "           ");
+                    Console.WriteLine("Count of bounces: " + ball.countOfBounces + "          ");
                     Console.WriteLine();
-                    Console.WriteLine("RPaddle pos: " + new Vector3(0, LeftStep, 0)+ "           ");
+                    Console.WriteLine("LPaddle pos: " + new Vector3(0, RightStep, 0) + "           ");
+                    Console.WriteLine();
+                    Console.WriteLine("RPaddle pos: " + new Vector3(0, LeftStep, 0) + "           ");
                     Console.WriteLine();
                     Console.WriteLine();
-                    Console.WriteLine("AutoLeft: " + AutoLeft+ "           ");
-                    Console.WriteLine("AutoRight: " + AutoRight+ "           ");
+                    Console.WriteLine("AutoLeft: " + AutoLeft + "           ");
+                    Console.WriteLine("AutoRight: " + AutoRight + "           ");
                     Console.WriteLine();
-                    Console.WriteLine("Lag: "+Lag+ "           ");
-                    Console.WriteLine("LagValue: " + LagValue+ "           ");
-                    Console.WriteLine("Step: "+Step+ "           ");
-                    Console.WriteLine("StepValue: "+StepValue+ "           ");
+                    Console.WriteLine("Lag: " + Lag + "           ");
+                    Console.WriteLine("LagValue: " + LagValue + "           ");
+                    Console.WriteLine("Step: " + Step + "           ");
+                    Console.WriteLine("StepValue: " + StepValue + "           ");
                     Console.WriteLine();
-                    Console.WriteLine("Paused: "+!Runing+ "           ");
-                    
+                    Console.WriteLine("Paused: " + !Runing + "           ");
+
                 }
             }
 
@@ -371,24 +368,24 @@ namespace OpenTK_Pong_v2
             if (!Runing)
             {
 
-                
-                PauseObject.Render(shader,_timer);
-               
+
+                PauseObject.Render(shader, _timer);
+
                 SwapBuffers();
                 return;
             }
-            if(Lag)
-            Thread.Sleep(LagValue);
+            if (Lag)
+                Thread.Sleep(LagValue);
 
 
-            
+
 
             base.OnRenderFrame(e);
 
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             //Code goes here.
-           
+
 
 
             shader.Use();
@@ -399,18 +396,18 @@ namespace OpenTK_Pong_v2
             }
 
 
-            ball.GetPaddles(new Vector3(0,LeftStep,0),new Vector3(0,RightStep,0));
-            ball.Render(shader,_timer.Elapsed.Ticks/25000);
+            ball.GetPaddles(new Vector3(0, LeftStep, 0), new Vector3(0, RightStep, 0));
+            ball.Render(shader, _timer.Elapsed.Ticks / 25000);
 
-            if(AutoRight)
-            RightStep = ball.myPos.Y;
+            if (AutoRight)
+                RightStep = ball.myPos.Y;
 
             if (AutoLeft)
                 LeftStep = ball.myPos.Y;
 
-            RightPaddle.RenderObject.Render(shader, new Vector3(0,LeftStep,0));
+            RightPaddle.RenderObject.Render(shader, new Vector3(0, LeftStep, 0));
             LeftPaddle.RenderObject.Render(shader, new Vector3(0, RightStep, 0));
-           
+
 
             GL.UseProgram(shader.Handle);
 
@@ -418,20 +415,20 @@ namespace OpenTK_Pong_v2
 
 
 
-         //   int location = GL.GetUniformLocation(shader.Handle, "transform");
-         //
-         //   GL.UniformMatrix4(location, true, ref translation);
-         //
-         //   //  double timeValue = _timer.Elapsed.TotalSeconds;
-         //   //  float greenValue = (float)Math.Abs(Math.Sin(timeValue) / 3.0f + 0.5f);
-         //   //  float redValue = (float)Math.Abs(Math.Sin(timeValue+1) / 2.0f + 0.5f);
-         //   //  int vertexColorLocation = GL.GetUniformLocation(shader.Handle, "ourColor");
-         //   //  GL.Uniform4(vertexColorLocation,redValue , greenValue, (float)Math.Abs(Math.Sin(timeValue+2) / 1.0f + 0.5f), 1.0f);
-         //
-         //   GL.BindVertexArray(VertexArrayObject);
-         //   GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
-         //
-         //   GL.DrawElements(PrimitiveType.Triangles, ball.indices.Length, DrawElementsType.UnsignedInt, 0);
+            //   int location = GL.GetUniformLocation(shader.Handle, "transform");
+            //
+            //   GL.UniformMatrix4(location, true, ref translation);
+            //
+            //   //  double timeValue = _timer.Elapsed.TotalSeconds;
+            //   //  float greenValue = (float)Math.Abs(Math.Sin(timeValue) / 3.0f + 0.5f);
+            //   //  float redValue = (float)Math.Abs(Math.Sin(timeValue+1) / 2.0f + 0.5f);
+            //   //  int vertexColorLocation = GL.GetUniformLocation(shader.Handle, "ourColor");
+            //   //  GL.Uniform4(vertexColorLocation,redValue , greenValue, (float)Math.Abs(Math.Sin(timeValue+2) / 1.0f + 0.5f), 1.0f);
+            //
+            //   GL.BindVertexArray(VertexArrayObject);
+            //   GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
+            //
+            //   GL.DrawElements(PrimitiveType.Triangles, ball.indices.Length, DrawElementsType.UnsignedInt, 0);
 
             SwapBuffers();
         }
@@ -457,7 +454,7 @@ namespace OpenTK_Pong_v2
             new Thread(() => Settings.Beep(1000, 25)).Start();
         }
 
-       
+
 
     }
 }

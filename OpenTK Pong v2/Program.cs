@@ -15,7 +15,7 @@
             //      game.Run();
             //  }
 
-            
+
 
 
 
@@ -45,7 +45,8 @@
                 {
                     Console.BackgroundColor = ConsoleColor.Black;
                     Console.Write(' ');
-                }else
+                }
+                else
                 {
                     Console.BackgroundColor = ConsoleColor.DarkYellow;
                     Console.Write(' ');
@@ -54,8 +55,8 @@
             }
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ReadKey(true);
-            #endregion 
-            
+            #endregion
+
         }
 
         public static void Menu()
@@ -70,20 +71,21 @@
 
             Render();
 
-            while(true)
-            switch (Console.ReadKey().Key)
-            {
-                case ConsoleKey.W or ConsoleKey.UpArrow:
-                    if(Choice<=0)
-                    {
-                        Choice=Lines.Length-1;
-                    }else
-                        Choice--;
+            while (true)
+                switch (Console.ReadKey().Key)
+                {
+                    case ConsoleKey.W or ConsoleKey.UpArrow:
+                        if (Choice <= 0)
+                        {
+                            Choice = Lines.Length - 1;
+                        }
+                        else
+                            Choice--;
                         new Thread(() => Settings.Beep(5000, 25)).Start();
                         Render();
-                    break;
+                        break;
 
-                case ConsoleKey.S or ConsoleKey.DownArrow:
+                    case ConsoleKey.S or ConsoleKey.DownArrow:
                         if (Choice >= Lines.Length - 1)
                         {
                             Choice = 0;
@@ -98,12 +100,12 @@
                         Select();
                         Render();
                         break;
-            }
+                }
 
 
             void Render()
             {
-                
+
                 Console.Clear();
                 for (int i = 0; i < Lines.Length; i++)
                 {
@@ -117,8 +119,8 @@
                     }
                     else
                     {
-                       
-                        Console.WriteLine("  "+Lines[i]);
+
+                        Console.WriteLine("  " + Lines[i]);
                     }
                 }
             }
@@ -175,7 +177,7 @@
 
                 string[] SetString()
                 {
-                    string data="";
+                    string data = "";
 
                     data += "Pálky se ovládají pomocí WSAD a šipek.#-#";
                     data += "Klávesy A a D zrychlují či zpomalují pálky, stejné platí i u šipek.#-#";
@@ -188,8 +190,8 @@
                     data += "   3 - těžká obtížnost#-#";
                     data += "#-#";
                     data += "Stiskni klávesu pro návrat do menu...";
-                    
-                    
+
+
 
                     return data.Split("#-#");
                 }

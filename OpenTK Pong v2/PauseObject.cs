@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using System.Diagnostics;
-using OpenTK.Graphics.OpenGL4;
+﻿
 using OpenTK.Mathematics;
-using OpenTK.Windowing.Desktop;
-using OpenTK.Windowing.Common;
-using OpenTK.Windowing.GraphicsLibraryFramework;
-using System.ComponentModel;
+using System.Diagnostics;
 
 
 namespace OpenTK_Pong_v2
@@ -48,8 +38,8 @@ namespace OpenTK_Pong_v2
 
             RenderObject.Render2(shader, new Vector3(0.5f * (float)Math.Sin(0.125f * MathHelper.DegreesToRadians(timer.ElapsedMilliseconds)), 0, 0), MathHelper.DegreesToRadians(timer.ElapsedMilliseconds));
             RenderObject2.Render2(shader, new Vector3(-0.5f * (float)Math.Sin(0.125f * MathHelper.DegreesToRadians(timer.ElapsedMilliseconds)), 0, 0), MathHelper.DegreesToRadians(timer.ElapsedMilliseconds));
-            RenderObject3.Render2(shader, new Vector3(0,-0.55f,  0), MathHelper.DegreesToRadians(-timer.ElapsedMilliseconds));
-            RenderObject4.Render2(shader, new Vector3(0,0.55f,  0), MathHelper.DegreesToRadians(-timer.ElapsedMilliseconds));
+            RenderObject3.Render2(shader, new Vector3(0, -0.55f, 0), MathHelper.DegreesToRadians(-timer.ElapsedMilliseconds));
+            RenderObject4.Render2(shader, new Vector3(0, 0.55f, 0), MathHelper.DegreesToRadians(-timer.ElapsedMilliseconds));
         }
 
     }
